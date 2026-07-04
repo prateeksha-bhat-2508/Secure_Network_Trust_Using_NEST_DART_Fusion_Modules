@@ -14,7 +14,7 @@
 - [Dataset](#-dataset)
 - [Core Modules](#-core-modules)
   - [NEST (Network Evidence & Structural Trust)](#nest-network-evidence--structural-trust)
-  - [DART (Dynamic Adaptive Risk Trust)](#dart-dynamic-adaptive-risk-trust)
+  - [DART (decisive Adaptive Risk Trust)](#dart-decisive-adaptive-risk-trust)
   - [FUSION (Combined Trust Value)](#fusion-combined-trust-value)
 - [Pipeline Steps](#-pipeline-steps)
 - [Results](#-results)
@@ -36,7 +36,7 @@ This project presents a **novel trust‑based intrusion detection framework** fo
 | :--- | :--- |
 | **XGBoost ML** | Predicts per‑flow attack probability |
 | **NEST** | Network Evidence & Structural Trust – reputation + centrality based trust |
-| **DART** | Dynamic Adaptive Risk Trust – real‑time behavior + routing trust |
+| **DART** | decisive Adaptive Risk Trust – real‑time behavior + routing trust |
 | **FUSION** | Weighted fusion of NEST and DART into a unified Trust Value |
 | **Proof of Trust** | Blockchain‑based ledger to ensure trust scores are tamper‑proof |
 
@@ -175,12 +175,12 @@ NEST_Score = 0.5 * [0.7*(0.6*Unified + 0.4*Neighbor)*Centrality + 0.3*Historical
 
 ---
 
-### DART (Dynamic Adaptive Risk Trust)
+### DART (decisive Adaptive Risk Trust)
 
 **Formerly known as:** ADRS‑MPIQ  
-**Full Expansion:** Dynamic Adaptive Risk Trust
+**Full Expansion:** decisive Adaptive Risk Trust
 
-DART evaluates a node's trustworthiness based on **real‑time behavior**, **routing capability**, and **queue dynamics**.
+DART evaluates a node's trustworthiness based on **real‑time behavior**, **routing capability**, and **queue decisives**.
 
 #### Internal Components:
 
@@ -541,10 +541,6 @@ D:.
 | **Containerization** | Dockerize the entire pipeline for easy deployment. |
 
 ---
-
-## 📝 License
-
-This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ---
 
