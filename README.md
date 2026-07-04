@@ -1,1014 +1,563 @@
-<div align="center">
+# Secure IoT Trust Intelligence Framework
 
-# 🔐 BARM_vs_AdRS-MPIQ
-### A Machine Learning Assisted Hybrid Trust Evaluation Framework for Secure IoT Networks using Trust Evidence Fusion, BARM, AdRS-MPIQ and Blockchain-based Proof of Trust
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<img src="https://img.shields.io/badge/Python-3.11+-blue?logo=python">
-<img src="https://img.shields.io/badge/Streamlit-Dashboard-red?logo=streamlit">
-<img src="https://img.shields.io/badge/XGBoost-Intrusion%20Detection-success">
-<img src="https://img.shields.io/badge/Blockchain-Proof%20of%20Trust-yellow">
-<img src="https://img.shields.io/badge/Network-IoT-orange">
-<img src="https://img.shields.io/badge/License-MIT-green">
+**A hybrid trust‑based intrusion detection system combining ML, Network Graph Analysis, and Blockchain‑based Proof of Trust**
 
 ---
 
-**A Next-Generation Trust Evaluation Framework integrating Machine Learning, Trust Evidence Fusion, Hybrid Trust Computation, BARM, AdRS-MPIQ Routing Optimization and Blockchain-based Trust Validation for Secure IoT Networks.**
+## 📋 Table of Contents
 
-</div>
-
----
-
-# 📖 Abstract
-
-Internet of Things (IoT) environments are increasingly deployed in smart homes, healthcare, industrial automation, transportation, and critical infrastructure. While these interconnected devices enable intelligent automation and real-time communication, they also introduce significant security challenges due to their heterogeneous nature, limited computational resources, and vulnerability to sophisticated cyber attacks.
-
-Traditional trust evaluation techniques primarily rely on static trust metrics or historical interactions, making them less effective against dynamic adversarial behaviors and evolving attack patterns. Existing approaches such as BARM, AdRS-MPIQ, and Proof of Trust each address specific aspects of trust management; however, none of them provide a unified framework capable of integrating trust evidence, routing intelligence, blockchain validation, and machine learning-based attack prediction.
-
-This project proposes a **Machine Learning Assisted Hybrid Trust Evaluation Framework** that combines multiple trust evaluation methodologies into a single architecture. The proposed framework introduces a **Trust Evidence Fusion Layer (TEFL)** that aggregates behavioral, resource, communication, historical, and attack-related evidence to generate a comprehensive trust representation for every IoT node.
-
-Unlike conventional systems, the proposed framework integrates an **XGBoost-based Intrusion Detection Module** trained on more than **2.8 million network flows from the CIC-IDS2017 benchmark dataset**. Instead of relying solely on static attack labels, the trained model predicts attack probabilities for incoming network traffic, which are then incorporated as an additional trust evidence source inside the TEFL layer.
-
-The generated trust values are subsequently refined using **Hybrid Trust Computation**, evaluated through the **BARM trust management framework**, optimized using **AdRS-MPIQ routing mechanisms**, and finally secured through a **Blockchain-based Proof of Trust** architecture. An interactive Streamlit dashboard provides comprehensive visualization of trust analytics, blockchain validation, routing performance, network topology, and machine learning metrics.
-
-The proposed architecture demonstrates how machine learning and trust computation can be seamlessly integrated to provide a scalable, adaptive, and secure trust management framework for modern IoT environments.
-
----
-
-# 🎯 Problem Statement
-
-Traditional IoT trust management mechanisms suffer from several limitations:
-
-- Static trust computation without adaptive learning.
-- Dependence on manually defined trust metrics.
-- Lack of attack prediction capabilities.
-- Poor integration between routing and trust evaluation.
-- Absence of blockchain-based trust validation.
-- Limited explainability of trust decisions.
-- Inability to effectively handle large-scale dynamic IoT environments.
-
-These limitations motivate the development of a unified framework capable of integrating machine learning, trust evidence fusion, blockchain validation, and intelligent routing into a single trust evaluation architecture.
+- [Overview](#-overview)
+- [Architecture](#-architecture)
+- [Dataset](#-dataset)
+- [Core Modules](#-core-modules)
+  - [NEST (Network Evidence & Structural Trust)](#nest-network-evidence--structural-trust)
+  - [DART (Dynamic Adaptive Risk Trust)](#dart-dynamic-adaptive-risk-trust)
+  - [FUSION (Combined Trust Value)](#fusion-combined-trust-value)
+- [Pipeline Steps](#-pipeline-steps)
+- [Results](#-results)
+- [Screenshots](#-screenshots)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Project Structure](#-project-structure)
+- [Dependencies](#-dependencies)
+- [Future Work](#-future-work)
+- [License](#-license)
 
 ---
 
-# 💡 Proposed Solution
+## 🎯 Overview
 
-The proposed framework introduces a **multi-layer trust evaluation architecture** that combines:
+This project presents a **novel trust‑based intrusion detection framework** for IoT and network environments. It integrates:
 
-- Hybrid Trust Computation
-- Trust Evidence Fusion Layer (TEFL)
-- Blockchain-based Anti-aggregation Reputation Management (BARM)
-- AdRSE = Adaptive Rivest Shamir Advanced Encryption Standard (the hybrid encryption algorithm)
-- MPIQ = Multi-Parameter Ideative Queuing algorithm (used for cluster-head selection and optimal routing)
-- Blockchain-based Proof of Trust
-- Machine Learning Assisted Intrusion Detection using XGBoost
+| Component | Description |
+| :--- | :--- |
+| **XGBoost ML** | Predicts per‑flow attack probability |
+| **NEST** | Network Evidence & Structural Trust – reputation + centrality based trust |
+| **DART** | Dynamic Adaptive Risk Trust – real‑time behavior + routing trust |
+| **FUSION** | Weighted fusion of NEST and DART into a unified Trust Value |
+| **Proof of Trust** | Blockchain‑based ledger to ensure trust scores are tamper‑proof |
 
-The framework computes trust values by simultaneously considering:
-
-- Behavioral Trust
-- Resource Trust
-- Historical Trust
-- Communication Reliability
-- Network Centrality
-- Routing Efficiency
-- Machine Learning Predicted Attack Probability
-- Blockchain Consensus
-
-The final trust score represents a comprehensive measure of node reliability, making the framework suitable for secure routing, node authentication, and malicious node detection in IoT networks.
+The system evaluates **51 source IPs** (network devices) using **over 190,000 network flows**, computing trust scores that reflect both historical behavior and real‑time network activity.
 
 ---
 
-# ⭐ Novel Contributions
+## 🧱 Architecture
 
-Unlike the original research papers, this implementation introduces several significant improvements:
-
-## ✅ Trust Evidence Fusion Layer (TEFL)
-
-A novel trust evidence fusion mechanism is proposed to combine multiple heterogeneous trust metrics into a unified trust representation.
-
-The TEFL layer aggregates:
-
-- Behavioral Trust
-- Resource Trust
-- Historical Trust
-- Communication Reliability
-- Packet Delivery Ratio
-- Link Stability
-- Machine Learning Attack Probability
-
-into a single **Unified Trust Evidence Score**.
-
----
-
-## ✅ Machine Learning Assisted Trust Evaluation
-
-Instead of assigning attack probabilities directly from dataset labels, an **XGBoost Intrusion Detection Model** is trained using the **CIC-IDS2017 benchmark dataset (2.8+ Million network flows)**.
-
-The trained model predicts the probability that each incoming network flow is malicious.
-
-These predicted probabilities are injected into the Trust Evidence Fusion Layer, enabling trust computation to adapt according to machine learning predictions rather than static labels.
-
----
-
-## ✅ Hybrid Trust Computation
-
-The framework introduces a hybrid trust computation strategy by combining:
-
-- Direct Trust
-- Neighbor Trust
-- Network Centrality
-- Historical Trust
-
-to produce a robust trust estimation for every IoT node.
-
-This significantly improves resilience against isolated malicious behaviors and network topology changes.
-
----
-
-## ✅ Integrated BARM Framework
-
-The classical Blockchain-based Attack Reputation Model is enhanced by incorporating:
-
-- Unified Trust Evidence
-- Hybrid Trust
-- Reputation Average
-- Trust Propagation
-- Updated Trust Scores
-
-to improve attack resilience and trust estimation accuracy.
-
----
-
-## ✅ Enhanced AdRS-MPIQ Routing
-
-The routing framework integrates:
-
-- Queue Management
-- Intelligent Fitness Evaluation
-- Secure Routing Scores
-- Adaptive Clustering
-- Encryption-aware Communication
-
-to improve routing reliability while minimizing communication overhead.
+```
++-------------------------------------------------------------------------------+
+|                            DATA PIPELINE                                      |
++-------------------------------------------------------------------------------+
+|                                                                               |
+|  +----------+    +----------+    +----------+    +----------+               |
+|  | Raw CSV  |───▶| Cleaner  |───▶| Encoder  |───▶| Scaler   |               |
+|  |(UNSW-NB15)|    |(Dedup)   |    |(Cat→Num) |    |(Standard)|               |
+|  +----------+    +----------+    +----------+    +----------+               |
+|                                                                               |
+|  +----------+    +----------+    +----------+                               |
+|  | XGBoost  |───▶| Baseline |───▶| Feature  |                               |
+|  |(Attack   |    | Trust    |    | Engineer |                               |
+|  | Prob)    |    |(4 types) |    |          |                               |
+|  +----------+    +----------+    +----------+                               |
+|                                                                               |
+|  +-----------------------------------------------------------------------+  |
+|  |                     NODE AGGREGATION                                   |  |
+|  |  210,000 flows  ──▶  51 aggregated source IPs (nodes)                 |  |
+|  +-----------------------------------------------------------------------+  |
+|                                                                               |
+|  +----------+    +----------+    +----------+    +----------+               |
+|  | Network  |───▶| Hybrid   |───▶| Trust    |───▶| Neighbor |               |
+|  | Graph    |    | Trust    |    | Fusion   |    | Trust    |               |
+|  | (776)    |    |          |    | (TEFL)   |    |          |               |
+|  +----------+    +----------+    +----------+    +----------+               |
+|                                                                               |
+|  +-----------------------------------------------------------------------+  |
+|  |                        TRUST MODULES                                   |  |
+|  |                                                                       |  |
+|  |  +-----------------------+  +-------------------------------------+    |  |
+|  |  |        NEST           |  |               DART                  |    |  |
+|  |  |  (BARM replacement)   |  |       (ADRS-MPIQ replacement)      |    |  |
+|  |  |                       |  |                                     |    |  |
+|  |  |  UG ──▶ RA ──▶       |  |  Routing ──▶ Fitness ──▶           |    |  |
+|  |  |  Reputation ──▶      |  |  QueuePriority ──▶ Cluster          |    |  |
+|  |  |  NEST_Score          |  |  DART_Score                         |    |  |
+|  |  +-----------------------+  +-------------------------------------+    |  |
+|  |                                                                       |  |
+|  |  +---------------------------------------------------------------+    |  |
+|  |  |                     FUSION (Trust Manager)                     |    |  |
+|  |  |         0.4*NEST + 0.4*DART + 0.2*Unified_Trust_Evidence     |    |  |
+|  |  +---------------------------------------------------------------+    |  |
+|  +-----------------------------------------------------------------------+  |
+|                                                                               |
+|  +-----------------------------------------------------------------------+  |
+|  |                      PROOF OF TRUST                                   |  |
+|  |  +----------+  +----------+  +----------+  +----------+             |  |
+|  |  | Ledger   |──▶|Blockchain|──▶|Verification|──▶| Consensus|         |  |
+|  |  | Generation|  |(Hash Chain)|  |(Tamper    |  |(Mean    |         |  |
+|  |  |          |  |          |  | Check)   |  | Trust)  |         |  |
+|  |  +----------+  +----------+  +----------+  +----------+             |  |
+|  +-----------------------------------------------------------------------+  |
+|                                                                               |
+|  +-----------------------------------------------------------------------+  |
+|  |                    EVALUATION & DASHBOARD                              |  |
+|  |                                                                       |  |
+|  |  +----------+  +----------+  +----------+  +----------+             |  |
+|  |  | Accuracy, |  | Trust    |  |Blockchain|  | Network  |             |  |
+|  |  | Precision,|  | Score    |  | Verifica-|  | Graph    |             |  |
+|  |  | Recall, F1|  | Distrib. |  | tion     |  | Visual.  |             |  |
+|  |  +----------+  +----------+  +----------+  +----------+             |  |
+|  |                                                                       |  |
+|  |                     Streamlit Dashboard                               |  |
+|  +-----------------------------------------------------------------------+  |
+|                                                                               |
++-------------------------------------------------------------------------------+
+```
 
 ---
 
-## ✅ Blockchain-based Proof of Trust
+## 📊 Dataset
 
-Every finalized trust score is permanently validated using a lightweight blockchain implementation.
+| Property | Value |
+| :--- | :--- |
+| **Name** | Custom network traffic dataset (based on UNSW‑NB15 format) |
+| **Source** | `datasets/network/train_test_network.csv` |
+| **Rows** | 190,474 (after cleaning) |
+| **Columns** | 44 |
+| **Unique Source IPs** | 51 |
+| **Unique Destination IPs** | 753 |
+| **Graph Nodes** | 776 |
+| **Graph Edges** | 1,004 |
+| **Attack Types** | normal, scanning, ddos, injection, password, dos, backdoor, xss, ransomware, mitm |
+| **Protocols** | TCP (149,596), UDP (40,697), ICMP (181) |
 
-Each blockchain block stores:
+### Label Distribution
 
-- Node Identifier
-- Trust Value
-- Hash
-- Previous Hash
-- Timestamp
+| Class | Count | Percentage |
+| :--- | :--- | :--- |
+| **Benign (0)** | 42,040 | 22.1% |
+| **Attack (1)** | 148,434 | 77.9% |
 
-A Merkle Tree is generated to verify data integrity, while consensus algorithms ensure trustworthy validation across the network.
-
----
-
-## ✅ Interactive Analytics Dashboard
-
-A complete Streamlit-based visualization dashboard has been developed featuring:
-
-- Network Overview
-- Trust Analytics
-- TEFL Visualization
-- Hybrid Trust Analysis
-- BARM Performance
-- AdRS-MPIQ Analysis
-- Blockchain Explorer
-- Merkle Tree Visualization
-- Network Graph
-- XGBoost Intrusion Detection Metrics
-- Comparative Framework Evaluation
-
-making the proposed framework suitable for both research and practical demonstrations.
+The dataset contains **51 unique source IPs**, which represent the devices being evaluated. Each source IP has an average of ~3,700 flows, providing sufficient statistical weight for reliable trust computation.
 
 ---
 
-# 🚀 Key Features
+## 🧩 Core Modules
 
-- Hybrid Trust Evaluation
-- Trust Evidence Fusion Layer
-- BARM Trust Management
-- AdRS-MPIQ Secure Routing
-- Blockchain-based Proof of Trust
-- XGBoost Intrusion Detection
-- Machine Learning Assisted Trust Prediction
-- Network Centrality Analysis
-- Interactive Streamlit Dashboard
-- Blockchain Explorer
-- Merkle Tree Visualization
-- Comparative Framework Analysis
-- Automated Evaluation Metrics
-- Real-time Trust Computation
-- Modular Research Architecture
+### NEST (Network Evidence & Structural Trust)
 
----
+**Formerly known as:** BARM  
+**Full Expansion:** Network Evidence & Structural Trust
 
-# 🏗️ System Architecture
+NEST evaluates a node's trustworthiness based on **historical reputation** and **network position**.
 
-The proposed framework follows a modular layered architecture where each component performs a specialized task before passing its output to the next layer.
+#### Internal Components:
+
+| Step | Class | Formula | Description |
+| :--- | :--- | :--- | :--- |
+| 1 | **UG** | `0.6*Unified_Trust_Evidence + 0.4*Neighbor_Trust` | **Uncertainty & Group trust** – combines the node's own fused trust with the average trust of its neighbors. |
+| 2 | **RA** | `UG * Centrality_Trust` | **Risk Assessment** – scales group trust by network centrality. Central nodes (high centrality) have greater influence. |
+| 3 | **Reputation** | `0.7*RA + 0.3*Historical_Trust` | **Long‑term reputation** – blends current risk assessment with past behavioral history. |
+| 4 | **TrustUpdate** | `0.5*Reputation + 0.5*Hybrid_Trust` | **Final NEST Score** – combines reputation with hybrid trust (which itself contains centrality and unified evidence). |
+
+**NEST Formula (condensed):**
 
 ```text
-                                ┌─────────────────────────────┐
-                                │     Network Dataset         │
-                                │ (train_test_network.csv)    │
-                                └──────────────┬──────────────┘
-                                               │
-                                               ▼
-                                ┌─────────────────────────────┐
-                                │      Data Preprocessing     │
-                                │ • Cleaning                  │
-                                │ • Encoding                  │
-                                │ • Scaling                   │
-                                └──────────────┬──────────────┘
-                                               │
-                                               ▼
-                     ┌─────────────────────────────────────────────────┐
-                     │ Machine Learning Intrusion Detection (XGBoost)   │
-                     │ Trained on CIC-IDS2017 (2.8+ Million Flows)      │
-                     └──────────────┬───────────────────────────────────┘
-                                    │
-                         Predicted Attack Probability
-                                    │
-                                    ▼
-                      ┌────────────────────────────────┐
-                      │      Feature Engineering       │
-                      │ Behaviour Features             │
-                      │ Resource Features              │
-                      │ Historical Features            │
-                      │ Communication Features         │
-                      └──────────────┬─────────────────┘
-                                     │
-                                     ▼
-                      ┌────────────────────────────────┐
-                      │      Hybrid Trust Engine        │
-                      └──────────────┬─────────────────┘
-                                     │
-                                     ▼
-                 ┌───────────────────────────────────────────┐
-                 │ Trust Evidence Fusion Layer (TEFL)         │
-                 └──────────────┬────────────────────────────┘
-                                │
-                ┌───────────────┴───────────────────┐
-                ▼                                   ▼
-        ┌───────────────┐                 ┌────────────────┐
-        │     BARM      │                 │  AdRS-MPIQ     │
-        └───────┬───────┘                 └────────┬───────┘
-                │                                  │
-                └───────────────┬──────────────────┘
-                                ▼
-                ┌────────────────────────────────┐
-                │ Proof of Trust Blockchain      │
-                └──────────────┬─────────────────┘
-                               ▼
-                ┌────────────────────────────────┐
-                │ Streamlit Analytics Dashboard  │
-                └────────────────────────────────┘
+NEST_Score = 0.5 * [0.7*(0.6*Unified + 0.4*Neighbor)*Centrality + 0.3*Historical] + 0.5*Hybrid_Trust
 ```
 
----
-
-# 🔄 Complete Workflow
-
-The framework performs trust evaluation in multiple stages.
-
-## Step 1 — Dataset Loading
-
-The network traffic dataset is loaded from the preprocessing module.
-
-The framework currently supports
-
-- Network Dataset
-- UNSW-NB15 Training Dataset
-- UNSW-NB15 Testing Dataset
-- Multiple IoT datasets
-- CIC-IDS2017 (Machine Learning Module)
-
-The preprocessing pipeline automatically validates dataset availability before execution.
+**Interpretation:** Higher NEST scores indicate nodes that are:
+- Historically well‑behaved (`Historical_Trust`)
+- Well‑connected in the network (`Centrality_Trust`)
+- Trusted by their neighbors (`Neighbor_Trust`)
+- Demonstrating consistent behavior (`Unified_Trust_Evidence`)
 
 ---
 
-## Step 2 — Data Cleaning
+### DART (Dynamic Adaptive Risk Trust)
 
-The cleaning module performs
+**Formerly known as:** ADRS‑MPIQ  
+**Full Expansion:** Dynamic Adaptive Risk Trust
 
-- Duplicate removal
-- Missing value handling
-- Constant feature removal
-- Data validation
+DART evaluates a node's trustworthiness based on **real‑time behavior**, **routing capability**, and **queue dynamics**.
 
-This ensures that noisy network records do not influence trust computation.
+#### Internal Components:
 
----
+| Step | Class | Formula | Description |
+| :--- | :--- | :--- | :--- |
+| 1 | **Routing** | `0.6*Hybrid_Trust + 0.4*Centrality_Trust` | **Routing Score** – how well a node can route traffic based on its trust and centrality. |
+| 2 | **Fitness** | `0.5*NEST_Score + 0.3*Routing_Score + 0.2*(1 - Attack_Probability)` | **Fitness** – overall health of the node. High NEST + good routing + low attack risk = high fitness. |
+| 3 | **QueueManager** | `Priority = Attack_Probability + (1 - Routing_Score)` | **Queue Priority** – higher priority for nodes that are risky or have poor routing. |
+| 4 | **MPIQ** | `0.4*Fitness + 0.3*Routing_Score + 0.2*Hybrid_Trust + 0.1*NEST_Score` | **DART_Score** – final adaptive risk score. |
+| 5 | **Clustering** | `Cluster = (Fitness > median)` | **Cluster** – binary split of nodes into high‑fitness (good) and low‑fitness (bad) groups. |
+| 6 | **Encryption** | `Hash(Node_ID)` | **Anonymization** – hashes node IDs for privacy. |
 
-## Step 3 — Encoding
-
-Network traffic contains several categorical attributes such as
-
-- Protocol
-- Service
-- Connection State
-- DNS Information
-- SSL Attributes
-- HTTP Features
-
-These categorical values are converted into numerical representations using **Label Encoding**, allowing them to be processed by machine learning algorithms and trust models.
-
----
-
-## Step 4 — Feature Scaling
-
-Different network attributes possess different numerical ranges.
-
-For example,
-
-- Duration
-- Packet Count
-- Packet Size
-
-cannot be compared directly.
-
-The framework therefore performs **Min-Max Normalization** using
-
-\[
-x'=\frac{x-x_{min}}{x_{max}-x_{min}}
-\]
-
-which transforms every numerical feature into the range
-
-\[
-0 \le x \le 1
-\]
-
-ensuring fair contribution during trust computation.
-
----
-
-# 🤖 Machine Learning Assisted Intrusion Detection
-
-Unlike conventional trust frameworks, the proposed architecture introduces an independent Machine Learning module.
-
-## Training Dataset
-
-The XGBoost classifier is trained using
-
-**CIC-IDS2017**
-
-containing over
-
-- 2.8 Million Network Flows
-- Multiple attack categories
-- Benign traffic
-
-The model learns complex attack patterns that cannot be captured using manually defined rules.
-
----
-
-## Inference Dataset
-
-During execution,
-
-the trained XGBoost model predicts attack probabilities for
-
-**train_test_network.csv**
-
-instead of relying on dataset labels.
-
-This enables
-
-- adaptive trust estimation
-- realistic attack prediction
-- dynamic trust computation
-
----
-
-## Why XGBoost?
-
-XGBoost was selected because it provides
-
-- Extremely high classification accuracy
-- Fast inference
-- Excellent handling of imbalanced datasets
-- Low computational overhead
-- High scalability
-- Feature importance estimation
-
-Compared to traditional classifiers, XGBoost performs exceptionally well for intrusion detection problems involving heterogeneous network traffic.
-
----
-
-## XGBoost Integration
-
-Instead of computing
+**DART Formula (condensed):**
 
 ```text
-Attack Probability = Dataset Label
+DART_Score = 0.4*Fitness + 0.3*Routing + 0.2*Hybrid_Trust + 0.1*NEST_Score
 ```
 
-the proposed framework performs
+**Interpretation:** Higher DART scores indicate nodes that are:
+- Actively well‑performing (`Fitness`)
+- Good routers (`Routing_Score`)
+- Trustworthy in real‑time (`Hybrid_Trust`)
+- Supported by historical reputation (`NEST_Score`)
+
+---
+
+### FUSION (Combined Trust Value)
+
+**Trust_Value** is a weighted fusion of NEST, DART, and Unified_Trust_Evidence:
 
 ```text
-Network Traffic
-       │
-       ▼
-XGBoost Prediction
-       │
-       ▼
-Predicted Attack Probability
-       │
-       ▼
-Feature Engineering
-       │
-       ▼
-Trust Evidence Fusion
+Trust_Value = 0.4 * NEST_Score + 0.4 * DART_Score + 0.2 * Unified_Trust_Evidence
 ```
 
-The predicted attack probability becomes an additional trust evidence source inside TEFL.
+**Interpretation:** FUSION combines:
+- **40%** Historical reputation & network position (NEST)
+- **40%** Real‑time behavior & adaptability (DART)
+- **20%** Unified evidence from baseline trust components
 
-This makes the framework adaptive to previously unseen network behaviour.
-
----
-
-# 🧩 Feature Engineering
-
-The feature engineering module constructs several trust attributes required by later stages.
-
-These include
-
-## Behaviour Trust
-
-Measures node behaviour consistency based on
-
-- Packet Delivery Ratio
-- Attack Probability
-- Behaviour Consistency
-
-Higher behaviour trust indicates reliable communication behaviour.
+This ensures that a node's final trust score reflects both **who it has been** (NEST) and **what it is doing right now** (DART).
 
 ---
 
-## Resource Trust
+## 🔁 Pipeline Steps
 
-Represents node resource availability using
+The complete pipeline is executed by running `python main.py`. Here are the steps:
 
-- Residual Energy
-- Communication Reliability
-- Delay Score
-
-Nodes with stable resources receive higher trust.
-
----
-
-## Historical Trust
-
-Historical interactions are incorporated to prevent trust fluctuation.
-
-Frequently reliable nodes maintain higher trust values.
-
----
-
-## Link Stability
-
-Measures communication consistency using
-
-- TTL
-- Network statistics
-- Connection history
-
-Stable communication links receive higher trust scores.
+| Step | Operation | Output |
+| :--- | :--- | :--- |
+| 1 | Load & clean dataset | Cleaned DataFrame (190,474 × 44) |
+| 2 | Encode categorical columns | All columns numeric |
+| 3 | Scale numeric columns | Standardized values |
+| 4 | Predict attack probability (XGBoost) | `Predicted_Attack_Probability` per flow |
+| 5 | Feature Engineering | Residual Energy, PDR, Delay Score, etc. |
+| 6 | Baseline Trust (4 types) | Behaviour, Resource, Reliability, Historical Trust |
+| 7 | Node Aggregation (by `src_ip`) | 51 nodes with averaged trust values |
+| 8 | Network Graph Construction | 776 nodes, 1004 edges |
+| 9 | Centrality Computation | Degree, Betweenness, Closeness, Centrality_Trust |
+| 10 | Hybrid Trust | Hybrid_Trust (combines centrality + unified evidence) |
+| 11 | Trust Evidence Fusion (TEFL) | Unified_Trust_Evidence |
+| 12 | Neighbor Trust | Average trust of graph neighbors |
+| 13 | **NEST** | UG → RA → Reputation → NEST_Score |
+| 14 | **DART** | Routing → Fitness → QueuePriority → DART_Score |
+| 15 | **FUSION** | Trust_Value = 0.4*NEST + 0.4*DART + 0.2*Unified |
+| 16 | Proof of Trust | Blockchain generation, verification, consensus |
+| 17 | Evaluation | Accuracy, Precision, Recall, F1, ROC‑AUC, etc. |
+| 18 | Results Export | `final_results.csv`, `metrics.csv`, `blockchain.json` |
+| 19 | Dashboard | Launch `streamlit run dashboard/app.py` |
 
 ---
 
-## Communication Reliability
+## 📈 Results
 
-Communication reliability evaluates
+### Classification Performance
 
-- Successful communication
-- Routing consistency
-- Service stability
+| Metric | NEST | DART | FUSION |
+| :--- | :--- | :--- | :--- |
+| **Accuracy** | 0.9608 | 0.9804 | 0.9608 |
+| **Precision** | 0.8667 | 0.9286 | 0.8667 |
+| **Recall** | 1.0000 | 1.0000 | 1.0000 |
+| **F1‑Score** | 0.9286 | 0.9630 | 0.9286 |
+| **Detection Rate** | 1.0000 | 1.0000 | 1.0000 |
+| **False Positive Rate** | 0.0526 | 0.0263 | 0.0526 |
+| **Trust Stability** | 0.9230 | 0.8707 | 0.8945 |
+| **Validator Reliability** | 0.4023 | 0.4023 | 0.4023 |
 
-Reliable communication increases overall trust.
+### Interpretation
 
----
+| Observation | Insight |
+| :--- | :--- |
+| **DART achieves highest Accuracy (0.9804)** | DART's real‑time adaptive scoring (`Fitness` + `Routing`) is more discriminative than NEST's historical‑reputation approach on this dataset. |
+| **All models achieve Recall = 1.0000** | Every malicious node (32 out of 51) is correctly detected. Zero false negatives. |
+| **DART has lowest FPR (0.0263)** | Only 1 false positive out of 19 benign nodes – best precision among the three. |
+| **NEST has highest Trust Stability (0.9230)** | NEST's focus on historical reputation and centrality makes it more stable over time. |
+| **FUSION (Proposed) sits between NEST and DART** | It inherits NEST's stability and DART's adaptability, making it a balanced choice. |
+| **Validator Reliability = 0.4023** | This is the consensus (average trust) across all 51 nodes. Given that ~78% of flows are attacks, a consensus of ~0.40 indicates the system correctly assigns lower trust to malicious nodes. |
 
-# 🔀 Hybrid Trust Computation
+### Sample Trust Scores
 
-Hybrid Trust combines multiple trust sources instead of relying on a single metric.
+| Node ID | NEST_Score | DART_Score | Trust_Value (FUSION) |
+| :--- | :--- | :--- | :--- |
+| 13.55.50.68 | 0.2094 | 0.1637 | 0.2150 |
+| 172.17.0.5 | 0.4491 | 0.5241 | 0.5257 |
+| 172.17.0.7 | 0.4520 | 0.5260 | 0.5286 |
+| 172.17.0.8 | 0.4348 | 0.5148 | 0.5113 |
+| 192.168.1.1 | 0.3637 | 0.4618 | 0.4404 |
 
-The framework computes
-
-```text
-Hybrid Trust
-
-=
-
-Behaviour Trust
-+
-Historical Trust
-+
-Centrality Trust
-+
-Neighbour Trust
-```
-
-Hybrid Trust significantly improves robustness against
-
-- malicious forwarding
-- temporary failures
-- routing instability
-- isolated attacks
-
----
-
-# 🌐 Trust Evidence Fusion Layer (TEFL)
-
-TEFL is the core contribution of this project.
-
-Instead of evaluating trust using one metric,
-
-TEFL fuses multiple trust evidences into a unified representation.
-
-Input evidences include
-
-- Behaviour Trust
-- Resource Trust
-- Historical Trust
-- Communication Reliability
-- Packet Delivery Ratio
-- Link Stability
-- Machine Learning Attack Probability
-
-The output is
-
-```text
-Unified Trust Evidence
-```
-
-which becomes the primary trust representation used throughout the remaining framework.
+**Observation:** The highest‑trust nodes are internal IPs (`172.17.0.x`) with low attack probabilities, while external/public IPs have lower trust scores.
 
 ---
 
-# 🧮 Trust Score Computation
-
-The final trust score is computed by combining
-
-- Unified Trust Evidence
-- Hybrid Trust
-- Routing Trust
-- Reputation
-- Blockchain Validation
-
-The resulting score satisfies
-
-```text
-0 ≤ Trust ≤ 1
-```
-
-where
-
-- 1 indicates highly trusted nodes
-- 0 indicates malicious nodes
-
-The trust score continuously adapts according to current network behaviour.
-
----
-
----
-
-# 🔄 Complete Workflow
-
-The complete execution pipeline of the project is illustrated below.
-
-```text
-               Raw Network Dataset
-        (UNSW-NB15 + CICIDS2017)
-                     │
-                     ▼
-          Data Loading & Cleaning
-                     │
-                     ▼
-       Encoding + Feature Engineering
-                     │
-                     ▼
-           Feature Scaling Pipeline
-                     │
-                     ▼
-        Hybrid Trust Computation Engine
-                     │
-       ┌─────────────┼─────────────┐
-       ▼             ▼             ▼
-    BARM         AdRS-MPIQ     Baseline Models
-       │             │             │
-       └─────────────┼─────────────┘
-                     ▼
-          Trust & Routing Decisions
-                     │
-                     ▼
-       XGBoost Intrusion Detection
-                     │
-                     ▼
-        Blockchain Transaction Layer
-                     │
-                     ▼
-        Proof of Trust Verification
-                     │
-                     ▼
-      Performance Evaluation Engine
-                     │
-                     ▼
-        Interactive Streamlit Dashboard
-```
-
----
-
-# 🧠 Machine Learning Pipeline
-
-The machine learning engine performs intelligent intrusion detection before trust-based routing.
-
-### Step 1 — Dataset Loading
-
-The framework loads:
-
-- UNSW-NB15 Dataset
-- CICIDS2017 Dataset
-
-Both datasets are cleaned and transformed into a unified format.
-
----
-
-### Step 2 — Data Cleaning
-
-The preprocessing module
-
-- removes missing values
-- removes infinite values
-- removes duplicates
-- standardizes column names
-- converts datatypes
-
----
-
-### Step 3 — Encoding
-
-Categorical values are converted into numerical form.
-
-Examples include
-
-- protocol
-- service
-- connection state
-- DNS attributes
-- SSL attributes
-- HTTP attributes
-
-using Label Encoding.
-
----
-
-### Step 4 — Feature Scaling
-
-Numerical features are normalized using StandardScaler.
-
-This improves
-
-- convergence
-- model stability
-- prediction consistency
-
----
-
-### Step 5 — Feature Engineering
-
-Additional network statistics are generated including
-
-- Trust Indicators
-- Hybrid Trust Score
-- Traffic Statistics
-- Flow Aggregations
-- Packet Features
-
----
-
-### Step 6 — XGBoost Prediction
-
-The processed features are passed into the trained XGBoost classifier.
-
-Outputs include
-
-- Attack Probability
-- Binary Attack Prediction
-- Confidence Score
-
-These predictions are then fused with the trust engine before routing decisions are made.
-
----
-
-# 🛡 Hybrid Trust Management
-
-Unlike conventional systems that rely on a single trust metric, this framework combines multiple trust evidence sources.
-
-## Baseline Trust
-
-Computes the initial trust value using
-
-- historical behaviour
-- communication history
-- interaction success
-
----
-
-## Neighbor Trust
-
-Nodes evaluate neighbouring nodes.
-
-Parameters include
-
-- forwarding behaviour
-- successful transmission
-- packet delivery
-
----
-
-## Hybrid Trust
-
-Hybrid trust combines
-
-- Baseline Trust
-- Neighbor Trust
-- Network Behaviour
-- Machine Learning Prediction
-
-into a unified trust score.
-
----
-
-## Trust Fusion
-
-Multiple trust scores are aggregated into one final trust value.
-
-This minimizes
-
-- false trust
-- malicious recommendations
-- trust fluctuation
-
----
-
-# 🔐 BARM Engine
-
-The BARM engine evaluates node reliability before routing.
-
-Components include
-
-## Reputation Analysis
-
-Computes historical reputation.
-
-## Trust Prediction Score (TPS)
-
-Predicts future trustworthiness.
-
-## Utility Gain (UG)
-
-Measures communication usefulness.
-
-## Reputation Adjustment (RA)
-
-Penalizes malicious behaviour.
-
-## Trust Update
-
-Continuously updates node trust after every interaction.
-
----
-
-# 🚀 AdRS-MPIQ Routing Engine
-
-The routing engine performs intelligent secure routing.
-
-It consists of
-
-### Cluster Head Selection
-
-Nodes are selected using
-
-- Delay
-- Residual Energy
-- Distance
-- Trust Score
-
----
-
-### MPIQ Optimization
-
-Uses Multi-Parameter Ideative Queuing optimization for
-
-- Cluster Head Selection
-- Path Selection
-- Load Balancing
-
----
-
-### Adaptive Encryption
-
-Before transmission,
-
-packets are encrypted using
-
-AdRSE
-
-which combines
-
-- RSA
-- AES
-- Adaptive Key Generation
-
-to provide secure communication.
-
----
-
-# ⛓ Blockchain Layer
-
-Every routing decision is recorded on a lightweight blockchain.
-
-Each block stores
-
-- Sender Node
-- Receiver Node
-- Trust Score
-- Timestamp
-- Hash
-- Previous Hash
-
-Benefits include
-
-- Tamper resistance
-- Immutable records
-- Secure verification
-- Distributed trust
-
----
-
-# ✅ Proof of Trust Consensus
-
-Instead of Proof of Work,
-
-this framework implements
-
-Proof of Trust.
-
-Consensus depends on
-
-- Node Trust
-- Reputation
-- Routing Behaviour
-- Historical Performance
-
-This significantly reduces
-
-- computational overhead
-- energy consumption
-- verification latency
-
----
-
-# 📊 Evaluation Metrics
-
-The project evaluates multiple performance indicators.
-
-| Category | Metrics |
-|----------|----------|
-| Machine Learning | Accuracy, Precision, Recall, F1 Score |
-| Trust | Average Trust, Trust Distribution |
-| Routing | Delay, Packet Delivery Ratio, Throughput |
-| Security | Attack Detection Rate, Malicious Nodes |
-| Blockchain | Block Generation, Verification |
-| Network | Energy Consumption, Lifetime |
-
----
-
-# 📈 Experimental Results
-
-The developed framework demonstrates improvements in
-
-- Intrusion Detection
-- Trust Computation
-- Secure Routing
-- Blockchain Verification
-- Overall Network Reliability
-
-Generated result files include
+### Blockchain Verification
 
 ```
-results/
-
-├── blockchain.json
-├── final_results.csv
-├── metrics.csv
-└── xgboost_metrics.csv
+Blockchain Valid : True
+Consensus : 0.4023
 ```
 
-Additional trained artifacts
-
-```
-outputs/models/
-
-├── xgboost.pkl
-└── xgb_features.pkl
-```
+- **`True`** means the hash chain is intact – no trust score has been tampered with.
+- **Consensus (0.4023)** is the average trust across all 51 nodes, reflecting the network's overall trust level.
 
 ---
 
-# 🖥 Dashboard
+## 🖼️ Screenshots
 
-The Streamlit dashboard provides complete visualization of
+The `SS/` folder contains the following screenshots:
 
-- Network Topology
-- Trust Analytics
-- Blockchain Ledger
-- XGBoost Predictions
-- Performance Comparison
-- Evaluation Metrics
-- Engine Comparison
-- Overall System Overview
-
----
-
-# 📸 Dashboard Screenshots
-
-## Overall Dashboard
+| File | Description |
+| :--- | :--- |
+| `overview.png.png` | Dashboard overview page with KPI cards and trust comparison |
+| `networkTrust.png.png` | Network graph visualization |
+| `xgBoost.png.png` | XGBoost intrusion detection page |
+| `engineComparision.png.png` | Side‑by‑side comparison of NEST, DART, and FUSION |
 
 ![Overview](SS/overview.png.png)
-
----
-
-## Trust Analytics
-
 ![Network Trust](SS/networkTrust.png.png)
-
----
-
-## XGBoost Intrusion Detection
-
 ![XGBoost](SS/xgBoost.png.png)
-
----
-
-## Engine Comparison
-
 ![Engine Comparison](SS/engineComparision.png.png)
 
 ---
 
-# 🚀 Future Improvements
+## 🛠️ Installation
 
-Potential future enhancements include
+### Prerequisites
 
-- Deep Learning based Intrusion Detection
-- Graph Neural Networks for Trust Prediction
-- Federated Learning
-- Online Incremental Learning
-- Real-Time Packet Capture Integration
-- IoT Sensor Deployment
-- SDN Integration
-- Edge AI Deployment
-- Explainable AI (XAI)
-- Kubernetes Deployment
-- Cloud-based Distributed Monitoring
-- Digital Twin Integration
+- Python 3.10 or higher
+- Git
 
----
+### Steps
 
-# 📚 References
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/secure-iot-trust.git
+   cd secure-iot-trust
+   ```
 
-This project is inspired by recent research in
+2. **Create a virtual environment (recommended):**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate      # On Linux/Mac
+   # OR
+   venv\Scripts\activate         # On Windows
+   ```
 
-- Blockchain-enabled Trust Management
-- Wireless Sensor Networks
-- Machine Learning based Intrusion Detection
-- XGBoost Classification
-- Proof of Trust Consensus
-- AdRS-MPIQ Secure Routing Framework
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-The routing and trust concepts are adapted and experimentally extended based on the AdRS-MPIQ secure routing framework presented in recent WSN research.
-
----
-
-# 👩‍💻 Author
-
-**Prateeksha Bhat**
-
-Computer Science Engineering
-
-Artificial Intelligence • Machine Learning • Cybersecurity • Blockchain • Network Security • Full Stack Development
-
-GitHub
-
-https://github.com/prateeksha-bhat-2508
+4. **Place the dataset** in `datasets/network/`:
+   - The dataset should be named `train_test_network.csv`
+   - Or you can use the UNSW‑NB15 files (`UNSW_NB15_training-set.csv`, `UNSW_NB15_testing-set.csv`)
 
 ---
 
+## 🚀 Usage
+
+### 1. Train the XGBoost Model (if needed)
+
+```bash
+python ml/train_xgboost.py
+```
+
+This will save:
+- `outputs/models/xgboost.pkl`
+- `outputs/models/xgb_features.pkl`
+
+### 2. Run the Full Pipeline
+
+```bash
+python main.py
+```
+
+This will:
+- Load the dataset
+- Preprocess and encode
+- Compute trust scores (NEST, DART, FUSION)
+- Generate the blockchain
+- Evaluate performance
+- Save results to `results/`
+
+### 3. Launch the Dashboard
+
+```bash
+streamlit run dashboard/app.py
+```
+
+Navigate to `http://localhost:8501` in your browser.
+
+### Dashboard Pages
+
+| Page | Content |
+| :--- | :--- |
+| **Overview** | Trust score comparison, KPI cards, performance metrics |
+| **Trust Analytics** | Distribution charts, radar plot, summary statistics |
+| **Trust Evidence Fusion** | Detailed view of TEFL components |
+| **Comparison** | Side‑by‑side comparison of NEST, DART, FUSION |
+| **Blockchain** | Visualisation of the blockchain ledger |
+| **Network** | Interactive network graph |
+| **ML Intrusion Detection** | XGBoost attack probability distribution |
+
+---
+
+## 📁 Project Structure
+
+```
+D:.
+│   .gitignore
+│   main.py                     # Main pipeline entry point
+│   README.md                   # This file
+│   requirements.txt            # Python dependencies
+│
+├───adrs_mpiq                   # DART module (formerly ADRS-MPIQ)
+│   │   clustering.py           # Clustering by fitness
+│   │   encryption.py           # Node ID anonymization
+│   │   fitness.py              # Fitness score calculation
+│   │   mpiq.py                 # DART_Score (final)
+│   │   queue_manager.py        # Queue priority
+│   │   routing.py              # Routing score
+│   │
+├───barm                        # NEST module (formerly BARM)
+│   │   ra.py                   # Risk Assessment
+│   │   reputation.py           # Reputation score
+│   │   trust_update.py         # NEST_Score calculation
+│   │   ug.py                   # Uncertainty & Group trust
+│   │
+├───blockchain                  # Blockchain implementation
+│       block.py
+│       blockchain.py
+│       transaction.py
+│
+├───comparison                  # Comparative analysis
+│       benchmark.py
+│       evaluator.py
+│       metrics.py
+│
+├───dashboard                   # Streamlit frontend
+│   │   app.py                  # Main dashboard entry
+│   │   styles.py               # Custom CSS
+│   │   visualization.py        # Plotly visualizations
+│   │
+│   ├───components
+│   │   │   blockchain.py       # Blockchain page
+│   │   │   comparison.py       # Comparison page
+│   │   │   ml_intrusion.py     # ML detection page
+│   │   │   network.py          # Network graph page
+│   │   │   overview.py         # Overview page
+│   │   │   tefl.py             # Trust Evidence Fusion page
+│   │   │   trust_analytics.py  # Trust Analytics page
+│   │
+├───datasets                    # Dataset storage
+│   ├───network
+│   │   │   train_test_network.csv
+│   │   │   UNSW_NB15_testing-set.csv
+│   │   │   UNSW_NB15_training-set.csv
+│   │
+├───evaluation                  # Metrics computation
+│       metrics.py
+│
+├───ml                          # Machine Learning
+│       predict_attack.py       # XGBoost inference wrapper
+│       preprocessor.py         # Data preprocessing for ML
+│       train_xgboost.py        # Training script
+│       xgboost_model.py        # Model class
+│
+├───outputs                     # Generated outputs
+│   ├───models
+│   │   │   xgboost.pkl         # Trained XGBoost model
+│   │   │   xgb_features.pkl    # Feature list
+│   │
+├───preprocessing               # Data preprocessing pipeline
+│       baseline_trust_v2.py    # Four baseline trust types
+│       cleaner.py              # Data cleaning
+│       data_profiler.py        # Dataset profiling
+│       encoder.py              # Label encoding
+│       feature_engineering.py  # Feature extraction
+│       hybrid_trust_v2.py      # Hybrid trust computation
+│       loader.py               # Dataset loader
+│       network_graph.py        # Network graph construction
+│       node_aggregation.py     # Node aggregation by src_ip
+│       scaler.py               # Feature scaling
+│       trust_fusion.py         # Trust Evidence Fusion Layer (TEFL)
+│
+├───proof_of_trust              # Proof of Trust module
+│       consensus.py            # Consensus (mean trust)
+│       ledger.py               # Blockchain ledger generation
+│       trust_manager.py        # FUSION trust value
+│       verification.py         # Hash chain verification
+│
+├───results                     # Output results
+│       blockchain.json         # Full blockchain ledger
+│       final_results.csv       # Final node trust scores
+│       final_results_flow.csv  # Per‑flow results
+│       metrics.csv             # Evaluation metrics
+│       xgboost_metrics.csv     # XGBoost training metrics
+│
+├───SS                          # Screenshots
+│       engineComparision.png.png
+│       networkTrust.png.png
+│       overview.png.png
+│       xgBoost.png.png
+│
+└───utils                       # Utilities
+        config.py               # Configuration
+        constant.py             # Constants
+        helpers.py              # Helper functions
+        logger.py               # Logging setup
+```
+
+---
+
+## 📦 Dependencies
+
+| Package | Version | Purpose |
+| :--- | :--- | :--- |
+| `pandas` | ≥2.0.0 | Data manipulation |
+| `numpy` | ≥1.24.0 | Numerical operations |
+| `scikit-learn` | ≥1.2.0 | ML preprocessing, metrics |
+| `xgboost` | ≥1.7.0 | XGBoost classifier |
+| `plotly` | ≥5.14.0 | Interactive visualizations |
+| `streamlit` | ≥1.25.0 | Dashboard UI |
+| `networkx` | ≥3.0.0 | Graph construction & centrality |
+| `python-louvain` | ≥0.16.0 | Community detection (optional) |
+| `scipy` | ≥1.10.0 | Statistical functions |
+
+---
+
+## 🔬 Future Work
+
+| Area | Description |
+| :--- | :--- |
+| **Real‑time streaming** | Adapt the pipeline for live network traffic (using Kafka or WebSockets). |
+| **Federated Learning** | Decentralize trust computation across multiple edge nodes. |
+| **More sophisticated consensus** | Replace simple mean with Byzantine Fault Tolerance (e.g., PBFT). |
+| **Additional datasets** | Validate on CIC‑IDS‑2017, CSE‑CIC‑IDS‑2018, and BoT‑IoT. |
+| **Hyperparameter tuning** | Use Optuna or GridSearch for NEST/DART weights. |
+| **Explainability** | SHAP/LIME for feature importance in trust scores. |
+| **Containerization** | Dockerize the entire pipeline for easy deployment. |
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- UNSW‑NB15 dataset creators for providing the base dataset.
+- The open‑source community for the excellent libraries used in this project.
+
+---
+
+## ✍️ Authors
+
+Prateeksha Bhat
+
+Computer Science and Information Science Engineering,
+BMS College of Engineering
