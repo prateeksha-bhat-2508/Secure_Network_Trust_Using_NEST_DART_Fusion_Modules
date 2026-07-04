@@ -548,7 +548,7 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - UNSW‑NB15 dataset creators for providing the base dataset.
 - The open‑source community for the excellent libraries used in this project.
