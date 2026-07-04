@@ -1,7 +1,7 @@
 # Secure IoT Trust Intelligence Framework
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 **A hybrid trust‑based intrusion detection system combining ML, Network Graph Analysis, and Blockchain‑based Proof of Trust**
 
@@ -559,5 +559,5 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 
 Prateeksha Bhat
 
-Computer Science and Information Science Engineering,
+Computer Science and Information Science Engineering, STEM Enthusiast
 BMS College of Engineering
