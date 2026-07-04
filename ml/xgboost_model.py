@@ -1,14 +1,20 @@
 import joblib
-
-MODEL_PATH = "outputs/models/xgboost.pkl"
+import pandas as pd
 
 class XGBoostIDS:
-
-    def __init__(self):
-        self.model = joblib.load(MODEL_PATH)
+    """
+    A simple wrapper around the XGBoost model.
+    It loads the model and feature list, and provides prediction methods.
+    """
+    def __init__(self, model_path="outputs/models/xgboost.pkl",
+                 features_path="outputs/models/xgb_features.pkl"):
+        self.model = joblib.load(model_path)
+        self.features = joblib.load(features_path)
 
     def predict(self, X):
-        return self.model.predict(X)
+        """Return binary predictions (0/1) for input DataFrame."""
+        return self.model.predict(X[self.features])
 
     def predict_probability(self, X):
-        return self.model.predict_proba(X)[:, 1]
+        """Return attack probabilities (0..1) for input DataFrame."""
+        return self.model.predict_proba(X[self.features])[:, 1]

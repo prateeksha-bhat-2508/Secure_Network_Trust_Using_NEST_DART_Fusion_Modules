@@ -3,321 +3,175 @@ import glob
 import joblib
 import pandas as pd
 import numpy as np
-
 from xgboost import XGBClassifier
-
 from sklearn.model_selection import train_test_split
-
-from sklearn.preprocessing import LabelEncoder
-
 from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score,
-    roc_auc_score,
-    confusion_matrix,
+    accuracy_score, precision_score, recall_score,
+    f1_score, roc_auc_score, confusion_matrix
 )
 
-# ==========================================
-# Dataset Folder
-# ==========================================
+# ============================================================
+# CONFIGURATION
+# ============================================================
 
-DATASET_FOLDER = r"datasets/MachineLearningCVE"
+# Point this to your dataset CSV file (or folder containing CSVs)
+DATASET_PATH = "datasets/network/train_test_network.csv"   # <--- CHANGE THIS
 
-# Change this to wherever you extracted the CSVs
+# Alternatively, if you have multiple CSV files in a folder:
+# DATASET_PATH = "datasets/MachineLearningCVE/*.csv"
 
-# ==========================================
-# Read all CSVs
-# ==========================================
+# Features to use (must match columns in the dataset)
+FEATURES = [
+    "duration",
+    "src_pkts",
+    "dst_pkts",
+    "src_bytes",
+    "dst_bytes"
+]
 
-csv_files = glob.glob(
-    os.path.join(DATASET_FOLDER, "*.csv")
-)
+LABEL_COL = "label"          # 0 = benign, 1 = attack
+TEST_SIZE = 0.2
+RANDOM_STATE = 42
 
-print(f"\nFound {len(csv_files)} CSV files\n")
+# XGBoost hyperparameters (same as your original)
+XGB_PARAMS = {
+    "n_estimators": 300,
+    "max_depth": 8,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "random_state": RANDOM_STATE,
+    "eval_metric": "logloss",
+    "tree_method": "hist"
+}
 
-dfs = []
+# ============================================================
+# LOAD DATA
+# ============================================================
 
-for file in csv_files:
+def load_data(path):
+    """Load a single CSV or all CSVs in a folder."""
+    if os.path.isdir(path):
+        csv_files = glob.glob(os.path.join(path, "*.csv"))
+        print(f"Found {len(csv_files)} CSV files in {path}")
+        dfs = []
+        for f in csv_files:
+            print(f"  Loading {os.path.basename(f)} ...")
+            dfs.append(pd.read_csv(f, low_memory=False))
+        return pd.concat(dfs, ignore_index=True)
+    else:
+        print(f"Loading single CSV: {path}")
+        return pd.read_csv(path, low_memory=False)
 
-    print("Loading:", os.path.basename(file))
+df = load_data(DATASET_PATH)
+print(f"Initial shape: {df.shape}")
 
-    dfs.append(
-        pd.read_csv(file, low_memory=False)
-    )
-
-df = pd.concat(
-    dfs,
-    ignore_index=True
-)
-
-print("\nTotal Shape:", df.shape)
-
-print("\nCIC Columns:")
-print(df.columns.tolist())
-
-# ==========================================
-# Clean Column Names
-# ==========================================
-
+# Strip column names
 df.columns = df.columns.str.strip()
 
-# ==========================================
-# Remove duplicates
-# ==========================================
+# ============================================================
+# CLEAN DATA
+# ============================================================
 
+# Drop duplicates
 df.drop_duplicates(inplace=True)
 
-# ==========================================
-# Replace Inf
-# ==========================================
+# Replace infinities with NaN
+df.replace([np.inf, -np.inf], np.nan, inplace=True)
 
-df.replace(
-    [np.inf, -np.inf],
-    np.nan,
-    inplace=True
-)
+# Ensure label is integer
+if LABEL_COL not in df.columns:
+    raise KeyError(f"Label column '{LABEL_COL}' not found.")
+df[LABEL_COL] = df[LABEL_COL].astype(int)
 
+# Keep only the required features + label
+required_cols = FEATURES + [LABEL_COL]
+missing = [c for c in required_cols if c not in df.columns]
+if missing:
+    raise ValueError(f"Missing columns: {missing}")
+
+df = df[required_cols].copy()
+
+# Drop rows with NaN (if any)
 df.dropna(inplace=True)
+print(f"After cleaning: {df.shape}")
 
-print("After Cleaning:", df.shape)
+# ============================================================
+# SPLIT FEATURES / TARGET
+# ============================================================
 
-# ==========================================
-# Label Column
-# ==========================================
+X = df[FEATURES]
+y = df[LABEL_COL]
 
-label_column = "Label"
+# Check class distribution
+print("Class distribution:")
+print(y.value_counts())
 
-# Binary classification
-
-df[label_column] = np.where(
-    df[label_column] == "BENIGN",
-    0,
-    1
-)
-
-# ==========================================
-# Features
-# ==========================================
-
-COMMON_FEATURES = [
-    "Destination Port",
-    "Protocol",
-    "Flow Duration",
-    "Total Fwd Packets",
-    "Total Backward Packets",
-    "Total Length of Fwd Packets",
-    "Total Length of Bwd Packets"
-]
-
-COMMON_FEATURES = [
-    "Flow Duration",
-    "Total Fwd Packets",
-    "Total Backward Packets",
-    "Total Fwd Packets",
-    "Protocol",
-    "Total Length of Fwd Packets",
-    "Total Length of Bwd Packets"
-]
-
-X = df[COMMON_FEATURES]
-y = df[label_column]
-
-# ==========================================
-# Encode categorical columns
-# ==========================================
-
-for col in X.select_dtypes(include="object").columns:
-
-    encoder = LabelEncoder()
-
-    X[col] = encoder.fit_transform(
-        X[col].astype(str)
-    )
-
-# ==========================================
-# Train Test Split
-# ==========================================
+# If you only have one class, training will fail – warn the user
+if len(y.unique()) < 2:
+    print("WARNING: Only one class present. Model will be useless.")
+    # You might want to exit or handle differently
 
 X_train, X_test, y_train, y_test = train_test_split(
-
-    X,
-
-    y,
-
-    test_size=0.20,
-
-    random_state=42,
-
+    X, y,
+    test_size=TEST_SIZE,
+    random_state=RANDOM_STATE,
     stratify=y
-
 )
 
-print("\nTraining Samples :", len(X_train))
-
-print("Testing Samples :", len(X_test))
-
-# ==========================================
-# XGBoost
-# ==========================================
-
-model = XGBClassifier(
-
-    n_estimators=300,
-
-    max_depth=8,
-
-    learning_rate=0.05,
-
-    subsample=0.8,
-
-    colsample_bytree=0.8,
-
-    random_state=42,
-
-    eval_metric="logloss",
-
-    tree_method="hist"
-
-)
-
-print("\nTraining XGBoost...\n")
-
-model.fit(
-
-    X_train,
-
-    y_train
-
-)
-
-# ==========================================
-# Prediction
-# ==========================================
-
-prediction = model.predict(X_test)
-
-probability = model.predict_proba(X_test)[:,1]
-
-# ==========================================
-# Metrics
-# ==========================================
-
-accuracy = accuracy_score(
-
-    y_test,
-
-    prediction
-
-)
-
-precision = precision_score(
-
-    y_test,
-
-    prediction
-
-)
-
-recall = recall_score(
-
-    y_test,
-
-    prediction
-
-)
-
-f1 = f1_score(
-
-    y_test,
-
-    prediction
-
-)
-
-roc = roc_auc_score(
-
-    y_test,
-
-    probability
-
-)
-
-tn,fp,fn,tp = confusion_matrix(
-
-    y_test,
-
-    prediction
-
-).ravel()
-
-print("\n==============================")
-
-print("XGBOOST RESULTS")
-
-print("==============================")
-
-print("Accuracy :", accuracy)
-
-print("Precision :", precision)
-
-print("Recall :", recall)
-
-print("F1 :", f1)
-
-print("ROC AUC :", roc)
-
-print("Detection Rate :", tp/(tp+fn))
-
-print("False Positive Rate :", fp/(fp+tn))
-
-# ==========================================
-# Save Model
-# ==========================================
-
-os.makedirs(
-
-    "outputs/models",
-
-    exist_ok=True
-
-)
-
-joblib.dump(
-
-    model,
-
-    "outputs/models/xgboost.pkl"
-
-)
-
-print("\nModel Saved.")
-
-metrics = pd.DataFrame({
-    "Metric": [
-        "Accuracy",
-        "Precision",
-        "Recall",
-        "F1-Score",
-        "ROC-AUC",
-        "Detection Rate",
-        "False Positive Rate"
-    ],
-    "Value": [
-        accuracy,
-        precision,
-        recall,
-        f1,
-        roc,
-        tp/(tp+fn),
-        fp/(fp+tn)
-    ]
-})
-
+print(f"Training samples: {len(X_train)}")
+print(f"Testing samples : {len(X_test)}")
+
+# ============================================================
+# TRAIN XGBOOST
+# ============================================================
+
+model = XGBClassifier(**XGB_PARAMS)
+print("\nTraining XGBoost...")
+model.fit(X_train, y_train)
+
+# ============================================================
+# EVALUATE
+# ============================================================
+
+y_pred = model.predict(X_test)
+y_proba = model.predict_proba(X_test)[:, 1]
+
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, zero_division=0)
+recall = recall_score(y_test, y_pred, zero_division=0)
+f1 = f1_score(y_test, y_pred, zero_division=0)
+roc = roc_auc_score(y_test, y_proba)
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+detection_rate = tp / (tp + fn) if (tp + fn) > 0 else 0
+false_positive_rate = fp / (fp + tn) if (fp + tn) > 0 else 0
+
+print("\n" + "="*50)
+print("XGBOOST EVALUATION")
+print("="*50)
+print(f"Accuracy       : {accuracy:.4f}")
+print(f"Precision      : {precision:.4f}")
+print(f"Recall         : {recall:.4f}")
+print(f"F1-score       : {f1:.4f}")
+print(f"ROC AUC        : {roc:.4f}")
+print(f"Detection Rate : {detection_rate:.4f}")
+print(f"False Positive Rate : {false_positive_rate:.4f}")
+
+# ============================================================
+# SAVE MODEL & FEATURES
+# ============================================================
+
+os.makedirs("outputs/models", exist_ok=True)
+joblib.dump(model, "outputs/models/xgboost.pkl")
+joblib.dump(FEATURES, "outputs/models/xgb_features.pkl")
+print("\nModel and feature list saved to outputs/models/")
+
+# Save metrics to CSV
 os.makedirs("results", exist_ok=True)
-metrics.to_csv("results/xgboost_metrics.csv", index=False)
-
-print("Metrics Saved.")
-
-joblib.dump(list(X.columns), "outputs/models/xgb_features.pkl")
+metrics_df = pd.DataFrame({
+    "Metric": ["Accuracy", "Precision", "Recall", "F1-Score", "ROC-AUC",
+               "Detection Rate", "False Positive Rate"],
+    "Value": [accuracy, precision, recall, f1, roc, detection_rate, false_positive_rate]
+})
+metrics_df.to_csv("results/xgboost_metrics.csv", index=False)
+print("Metrics saved to results/xgboost_metrics.csv")
