@@ -246,40 +246,6 @@ def main():
     with open("results/blockchain.json", "w") as f:
         json.dump(blockchain, f, indent=4)
 
-    from sklearn.model_selection import train_test_split
-    from sklearn.metrics import accuracy_score
-    import nympy as np
-    # Split into train (70%) and test (30%) – you have only 51 nodes, so adjust as needed
-    X = node_df[["BARM_Score", "ADRS_MPIQ_Score", "Trust_Value"]]
-    y = (node_df["Attack_Probability"] >= 0.5).astype(int)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=42, stratify=y
-    )
-    
-    def find_best_threshold(y_true, y_score):
-        thresholds = np.linspace(0.01, 0.99, 99)
-        best_t = 0.5
-        best_acc = 0
-        for t in thresholds:
-            pred = (y_score >= t).astype(int)
-            acc = accuracy_score(y_true, pred)
-            if acc > best_acc:
-                best_acc = acc
-                best_t = t
-        return best_t
-
-    barm_t = find_best_threshold(y_train, X_train["BARM_Score"])
-    adrs_t = find_best_threshold(y_train, X_train["ADRS_MPIQ_Score"])
-    prop_t = find_best_threshold(y_train, X_train["Trust_Value"])
-
-    # Evaluate on test set
-    barm_pred = (X_test["BARM_Score"] >= barm_t).astype(int)
-    adrs_pred = (X_test["ADRS_MPIQ_Score"] >= adrs_t).astype(int)
-    prop_pred = (X_test["Trust_Value"] >= prop_t).astype(int)
-
-    print("BARM Test Accuracy:", accuracy_score(y_test, barm_pred))
-    print("ADRS Test Accuracy:", accuracy_score(y_test, adrs_pred))
-    print("Proposed Test Accuracy:", accuracy_score(y_test, prop_pred))
 if __name__ == "__main__":
     main()
