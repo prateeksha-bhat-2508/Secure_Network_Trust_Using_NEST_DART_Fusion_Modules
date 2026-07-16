@@ -7,7 +7,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#-overview)
 - [Architecture](#-architecture)
@@ -28,7 +28,7 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This project presents a **novel trust‑based intrusion detection framework** for IoT and network environments. It integrates:
 
@@ -44,7 +44,7 @@ The system evaluates **51 source IPs** (network devices) using **over 190,000 ne
 
 ---
 
-## 🧱 Architecture
+## Architecture
 
 ```
 +-------------------------------------------------------------------------------+
@@ -117,7 +117,7 @@ The system evaluates **51 source IPs** (network devices) using **over 190,000 ne
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 | Property | Value |
 | :--- | :--- |
@@ -143,7 +143,7 @@ The dataset contains **51 unique source IPs**, which represent the devices being
 
 ---
 
-## 🧩 Core Modules
+##  Core Modules
 
 ### NEST (Network Evidence & Structural Trust)
 
@@ -224,7 +224,7 @@ This ensures that a node's final trust score reflects both **who it has been** (
 
 ---
 
-## 🔁 Pipeline Steps
+## Pipeline Steps
 
 The complete pipeline is executed by running `python main.py`. Here are the steps:
 
@@ -252,7 +252,7 @@ The complete pipeline is executed by running `python main.py`. Here are the step
 
 ---
 
-## 📈 Results
+## Results
 
 ### Classification Performance
 
@@ -304,7 +304,7 @@ Consensus : 0.4023
 
 ---
 
-## 🖼️ Screenshots
+## Screenshots
 
 The `SS/` folder contains the following screenshots:
 
@@ -322,7 +322,7 @@ The `SS/` folder contains the following screenshots:
 
 ---
 
-## 🛠️ Installation
+## Installation
 
 ### Prerequisites
 
@@ -356,7 +356,7 @@ The `SS/` folder contains the following screenshots:
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### 1. Train the XGBoost Model (if needed)
 
@@ -404,7 +404,7 @@ Navigate to `http://localhost:8501` in your browser.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 D:.
@@ -512,7 +512,7 @@ D:.
 
 ---
 
-## 📦 Dependencies
+## Dependencies
 
 | Package | Version | Purpose |
 | :--- | :--- | :--- |
@@ -528,7 +528,7 @@ D:.
 
 ---
 
-## 🔬 Future Work
+## Future Work
 
 | Area | Description |
 | :--- | :--- |
@@ -551,7 +551,7 @@ D:.
 
 ---
 
-## ✍️ Authors
+## Authors
 
 Prateeksha Bhat
 
